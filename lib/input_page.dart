@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'icon_content.dart';
 import 'reusable_card.dart';
+import 'constants.dart';
 
+enum Gender {
+  male,
+  female,
+}
 
 class InputPage extends StatefulWidget {
   @override
@@ -11,6 +15,10 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+
+  Gender selectedGender;
+  int height = 180;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,19 +26,30 @@ class _InputPageState extends State<InputPage> {
           title: Text('BMI CALCULATOR'),
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
               child: Row(
                 children: <Widget>[
                   Expanded(
                     child: ReusableCard(
-                      c: activeCardColor,
+                      onPress: (){
+                        setState(() {
+                          selectedGender = Gender.male;
+                        });
+                      },
+                      c: selectedGender == Gender.male ? kActiveCardColor : kInActiveCardColor,
                       cardChild: IconContent(label: "MALE", icon: FontAwesomeIcons.mars,),
                     ),
                   ),
                   Expanded(
                     child: ReusableCard(
-                      c: activeCardColor,
+                      onPress: (){
+                        setState(() {
+                          selectedGender = Gender.female;
+                        });
+                      },
+                      c: selectedGender == Gender.female ? kActiveCardColor : kInActiveCardColor,
                       cardChild: IconContent(label: "FEMALE", icon: FontAwesomeIcons.venus,),
                     )
                   ),
@@ -39,7 +58,43 @@ class _InputPageState extends State<InputPage> {
             ),
             Expanded(
               child: ReusableCard(
-                c: activeCardColor,
+                c: kActiveCardColor,
+                cardChild: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Height',
+                      style: kLabelTextStyle,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: <Widget>[
+                        Text(
+                          height.toString(),
+                          style: kNumberTextStyle,
+                        ),
+                        Text(
+                          'cm',
+                          style: kLabelTextStyle,
+                        )
+                      ],
+                    ),
+                    Slider(
+                      value: height.toDouble(),
+                      min: 100,
+                      max: 240,
+                      activeColor: Color(0xfffdba2c),
+                      inactiveColor: Color(0xffFFFFFF),
+                      onChanged: (double newValue){
+                        setState(() {
+                          height = newValue.round();
+                        });
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -47,22 +102,22 @@ class _InputPageState extends State<InputPage> {
                 children: <Widget>[
                   Expanded(
                     child: ReusableCard(
-                      c: activeCardColor,
+                      c: kActiveCardColor,
                     ),
                   ),
                   Expanded(
                     child: ReusableCard(
-                      c: activeCardColor,
+                      c: kActiveCardColor,
                     ),
                   )
                 ],
               ),
             ),
             Container(
-              color: bottomContainerColor,
+              color: kBottomContainerColor,
               margin: EdgeInsets.only(top: 10.0),
               width: double.infinity,
-              height: bottomContainerHeight,
+              height: kBottomContainerHeight,
             )
           ],
         ));
